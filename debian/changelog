@@ -1,5 +1,50 @@
-template-repository (1.0-1) unstable; urgency=medium
+debugpy (1.6.7+ds-1) unstable; urgency=medium
 
-  * Initial release
+  * New upstream version
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Julian Gilbey <jdg@debian.org>  Tue, 13 Jun 2023 22:01:54 +0100
+
+debugpy (1.6.6+ds-1) unstable; urgency=medium
+
+  * New upstream version
+  * Python 3.11 is now supported, so remove README.Debian
+
+ -- Julian Gilbey <jdg@debian.org>  Sat, 11 Feb 2023 21:32:06 +0000
+
+debugpy (1.6.4+git20221217.c419d5a+ds-1) unstable; urgency=medium
+
+  * New upstream version
+  * Exclude failing tests on Python 3.11; hopefully this closes:
+    #1025615), but it may be that other tests fail on architectures
+    besides amd64
+  * Add a README explaining that this package is not yet compatible with
+    Python 3.11, so many issues may arise
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 04 Jan 2023 22:31:34 +0000
+
+debugpy (1.6.3+git20221103.a2a3328+ds-1) unstable; urgency=medium
+
+  * New upstream snapshot
+  * Attempt to fix test failures (Closes: #1022188)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 09 Nov 2022 07:31:31 +0000
+
+debugpy (1.6.3+ds-1) unstable; urgency=medium
+
+  * New upstream version
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 08 Sep 2022 07:55:18 +0100
+
+debugpy (1.6.2+dfsg-2) unstable; urgency=medium
+
+  * Source-only upload
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 08 Aug 2022 08:51:26 +0100
+
+debugpy (1.6.2+dfsg-1) unstable; urgency=medium
+
+  * Initial release (Closes: #933190)
+    Initial packaging work (on the predecessor ptvsd) by William
+    Grzybowski <william@grzy.org>
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 04 Aug 2022 08:31:09 +0100

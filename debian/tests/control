@@ -1,0 +1,13 @@
+Tests: pytest
+Depends: gdb,
+         python3-all,
+         python3-django,
+         python3-flask,
+         python3-gevent,
+         python3-psutil,
+         python3-pytest,
+         python3-pytest-timeout,
+         python3-pytest-xdist,
+         python3-requests,
+         @
+Restrictions: allow-stderr

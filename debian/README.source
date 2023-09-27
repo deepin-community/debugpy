@@ -1,0 +1,7 @@
+debugpy and pydevd
+------------------
+
+debugpy bundles pydevd as a vendored source.  We instead provide pydevd
+through the python3-pydevd package.
+
+ -- Julian Gilbey <jdg@debian.org>, Mon, 25 Jul 2022 13:30:51 +0100

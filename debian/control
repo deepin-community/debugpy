@@ -1,15 +1,39 @@
-Source: template-repository
-Section: unknown
+Source: debugpy
+Section: python
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Debian Python Team <team+python@tracker.debian.org>
+Uploaders: Julian Gilbey <jdg@debian.org>
+Build-Depends: debhelper-compat (= 13),
+               dh-python,
+               dh-sequence-python3,
+               pybuild-plugin-pyproject,
+               python3-all,
+               python3-django <!nocheck>,
+               python3-flask <!nocheck>,
+               python3-gevent <!nocheck>,
+               python3-psutil <!nocheck>,
+               python3-pydevd (<< 2.9.7),
+               python3-pydevd (>= 2.9.6+ds),
+               python3-pytest <!nocheck>,
+               python3-pytest-timeout <!nocheck>,
+               python3-pytest-xdist <!nocheck>,
+               python3-requests <!nocheck>,
+               python3-setuptools
+Standards-Version: 4.6.2
+Homepage: https://github.com/microsoft/debugpy
+Vcs-Browser: https://salsa.debian.org/python-team/packages/debugpy
+Vcs-Git: https://salsa.debian.org/python-team/packages/debugpy.git
+Rules-Requires-Root: no
 
-Package: template-repository
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Package: python3-debugpy
+Architecture: all
+Depends: python3-pydevd (<< 2.9.7),
+         python3-pydevd (>= 2.9.6+ds),
+         ${misc:Depends},
+         ${python3:Depends}
+Description: Implementation of the Debug Adapter Protocol for Python 3
+ This package allows debugging of Python using Spyder and VS Code, among
+ others.  It can also be used directly.
+ .
+ It provides an interface to run on top of existing scripts or modules,
+ attach to a running process by ID or by importing debugpy into Python code.
