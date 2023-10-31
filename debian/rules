@@ -1,4 +1,58 @@
 #!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+include /usr/share/dpkg/pkg-info.mk
+
+export PYBUILD_NAME=debugpy
 
 %:
-	dh $@
+	dh $@ --buildsystem=pybuild
+
+# Ensure that we have updated the _version.py patch to the current
+# upstream PyPI version.
+
+UPSTREAM_VERSION = $(subst +ds,,$(DEB_VERSION_UPSTREAM))
+
+execute_after_dh_testdir:
+	grep -q $(UPSTREAM_VERSION) src/debugpy/_version.py
+
+# We link to pydevd as debugpy assumes that it is a vendored module;
+# it would not be that straightforward to modify debugpy to use the system
+# version of pydevd.
+# Unfortunately pydevd is horrible: it installs multiple different modules.
+# Rather than hardcode this, we calculate the list of modules dynamically.
+PYDEVD_TOP_LEVEL = $(shell dpkg -L python3-pydevd | grep dist-packages/ | \
+	cut -d/ -f6 | sort -u | grep -v egg-info)
+
+PYTHON_DIR=usr/lib/python3/dist-packages
+PYDEVD_VENDORED_DIR=debugpy/_vendored/pydevd
+
+# We rm -rf the vendored dir just in case it's been left over from
+# a previously failed test
+export PYBUILD_BEFORE_TEST=rm -rf {build_dir}/$(PYDEVD_VENDORED_DIR); \
+  mkdir {build_dir}/$(PYDEVD_VENDORED_DIR); \
+  for pydevd_top in $(PYDEVD_TOP_LEVEL); do \
+    ln -s /$(PYTHON_DIR)/$$pydevd_top \
+      {build_dir}/$(PYDEVD_VENDORED_DIR); done
+
+export PYBUILD_AFTER_TEST=rm -rf {build_dir}/$(PYDEVD_VENDORED_DIR)
+
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+override_dh_auto_test:
+	# * The http_proxy setting is to disable the proxies that pybuild
+	# introduces; the tests might set up and use a local http server.
+	# (See https://bugs.debian.org/1022188)
+	export http_proxy=""; \
+	PYBUILD_TEST_ARGS="$(shell debian/get_test_exclusions rules)" dh_auto_test || \
+	    PYBUILD_TEST_ARGS="$(shell debian/get_test_exclusions rules) -n1" dh_auto_test
+endif
+
+execute_after_dh_installdocs:
+	# dh_installdocs cannot handle a filename with spaces (bug #1016596)
+	cp -p doc/Subprocess\ debugging.md debian/python3-debugpy/usr/share/doc/python3-debugpy
+
+
+execute_after_dh_link:
+	dh_installdirs /$(PYTHON_DIR)/$(PYDEVD_VENDORED_DIR)
+	for pydevd_top in $(PYDEVD_TOP_LEVEL); do \
+	    dh_link /$(PYTHON_DIR)/$$pydevd_top /$(PYTHON_DIR)/$(PYDEVD_VENDORED_DIR)/$$pydevd_top; done
