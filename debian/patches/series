@@ -1,2 +1,3 @@
 pypi-version.patch
 remove-pydevd-from-setup.patch
+allow_unvendored.patch
