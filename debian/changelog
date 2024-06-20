@@ -1,3 +1,16 @@
+debugpy (1.8.0+ds-4) unstable; urgency=medium
+
+  * Silence unvendored warning when using system pydevd
+  * Reinstate flask tests now that python3-werkzeug has been updated
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 09 Jan 2024 09:04:22 +0000
+
+debugpy (1.8.0+ds-3) unstable; urgency=medium
+
+  * Skip failing tests (closes: #1058401)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 29 Dec 2023 14:15:49 +0000
+
 debugpy (1.8.0+ds-2) unstable; urgency=medium
 
   * Depend on more recent pydevd, otherwise tests break
