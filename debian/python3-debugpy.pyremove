@@ -1,0 +1,51 @@
+# Python 2 files which do not compile under Python 3,
+# thereby preventing package installation.
+debugpy/_vendored/pydevd/pydevd_attach_to_process/_check.py
+#
+# Windows only code; no point installing
+debugpy/_vendored/pydevd/pydevd_attach_to_process/winappdbg
+debugpy/_vendored/pydevd/pydevd_attach_to_process/windows
+#
+# This is only installed to help people on systems where the
+# Cython extensions have not already been built.  Though the
+# pydevd developers include it in the package (see
+# https://github.com/fabioz/PyDev.Debugger/issues/102), we have
+# no need for it in Debian.
+debugpy/_vendored/pydevd/setup_pydevd_cython.py
+#
+# macOS only
+debugpy/_vendored/pydevd/pydevd_attach_to_process/linux_and_mac/lldb_prepare.py
+#
+# Cython-related files; we have to list these mostly individually as
+# the glob system (*.pyx for example) only works on a per-directory
+# basis
+debugpy/_vendored/pydevd/build
+debugpy/_vendored/pydevd/_pydevd_bundle/*.c
+debugpy/_vendored/pydevd/_pydevd_bundle/*.pxd
+debugpy/_vendored/pydevd/_pydevd_bundle/*.pyx
+debugpy/_vendored/pydevd/_pydevd_frame_eval/*.c
+debugpy/_vendored/pydevd/_pydevd_frame_eval/*.pxd
+debugpy/_vendored/pydevd/_pydevd_frame_eval/*.pyx
+debugpy/_vendored/pydevd/_pydevd_frame_eval/*.h
+debugpy/_vendored/pydevd/pydevd_attach_to_process/common/*.h
+debugpy/_vendored/pydevd/pydevd_attach_to_process/common/*.hpp
+debugpy/_vendored/pydevd/pydevd_attach_to_process/linux_and_mac/*.sh
+debugpy/_vendored/pydevd/pydevd_attach_to_process/linux_and_mac/*.cpp
+#
+# Unused testing scripts
+debugpy/_vendored/pydevd/pydevd_attach_to_process/_always_live_program.py
+debugpy/_vendored/pydevd/pydevd_attach_to_process/_test_attach_to_process.py
+debugpy/_vendored/pydevd/pydevd_attach_to_process/_test_attach_to_process_linux.py
+debugpy/_vendored/pydevd/test*
+debugpy/_vendored/pydevd/_pydevd_frame_eval/vendored/bytecode/tests
+# Unneeded files
+debugpy/ThirdPartyNotices.txt
+debugpy/_vendored/pydevd/_pydevd_frame_eval/.gitignore
+debugpy/_vendored/pydevd/_pydevd_frame_eval/vendored/README.txt
+debugpy/_vendored/pydevd/_pydevd_frame_eval/vendored/bytecode-0.13.0.dev0.dist-info
+debugpy/_vendored/pydevd/pydev_ipython/README
+debugpy/_vendored/pydevd/pydevd_attach_to_process/README.txt
+debugpy/_vendored/pydevd/pydevd_attach_to_process/linux_and_mac/.gitignore
+debugpy/_vendored/pydevd/pydevd_attach_to_process/linux_and_mac/compile_manylinux.cmd
+debugpy/_vendored/pydevd/pydevd_plugins/extensions/README.md
+debugpy/_vendored/pydevd/pydev_sitecustomize/__not_in_default_pythonpath.txt

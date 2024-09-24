@@ -4,6 +4,7 @@ pytest
 pytest-xdist
 pytest-cov
 pytest-timeout
+pytest-retry
 
 ## Used by test helpers:
 
@@ -13,6 +14,7 @@ psutil
 ## Used in Python code that is run/debugged by the tests:
 
 django
-requests
-gevent
 flask
+gevent
+numpy
+requests

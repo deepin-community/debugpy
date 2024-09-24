@@ -4,19 +4,13 @@ set -e
 
 PYS=$(py3versions -s)
 
-# Many, many tests currently fail under Python 3.11; we simply exclude
-# them all, in the knowledge that this package is not fully Python 3.11
-# compatible
-EXCLUSIONS=$(debian/get_test_exclusions autopkgtest)
+cp -a debian/run_tests pytest.ini tests "$AUTOPKGTEST_TMP"
+ROOTDIR=$(pwd)
 
-cp -a pytest.ini tests "$AUTOPKGTEST_TMP"
 cd "$AUTOPKGTEST_TMP"
 
 for py in $PYS
 do
     echo "Testing with $py:"
-    # Some tests are slightly flaky, so we run the suite up to three times
-    # (It would be nice to make this more efficient as in the spyder package)
-    $py -m pytest $EXCLUSIONS || $py -m pytest -n1 $EXCLUSIONS || \
-	$py -m pytest -n1 $EXCLUSIONS
+    ./run_tests $ROOTDIR/debian/get_test_exclusions $py -m pytest
 done

@@ -3,34 +3,38 @@ Section: python
 Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Julian Gilbey <jdg@debian.org>
-Build-Depends: debhelper-compat (= 13),
+Build-Depends: cython3,
+               debhelper-compat (= 13),
                dh-python,
                dh-sequence-python3,
+               gdb <!nocheck>,
                pybuild-plugin-pyproject,
-               python3-all,
+               python3-all-dev,
                python3-django <!nocheck>,
                python3-flask <!nocheck>,
                python3-gevent <!nocheck>,
+               python3-numpy <!nocheck>,
                python3-psutil <!nocheck>,
-               python3-pydevd (<< 2.11),
-               python3-pydevd (>= 2.10.0+ds-2),
                python3-pytest <!nocheck>,
+               python3-pytest-retry <!nocheck>,
                python3-pytest-timeout <!nocheck>,
                python3-pytest-xdist <!nocheck>,
                python3-requests <!nocheck>,
                python3-setuptools
-Standards-Version: 4.6.2
+Standards-Version: 4.7.0
 Homepage: https://github.com/microsoft/debugpy
 Vcs-Browser: https://salsa.debian.org/python-team/packages/debugpy
 Vcs-Git: https://salsa.debian.org/python-team/packages/debugpy.git
 Rules-Requires-Root: no
 
 Package: python3-debugpy
-Architecture: all
-Depends: python3-pydevd (<< 2.11),
-         python3-pydevd (>= 2.10.0+ds-2),
+Architecture: any
+Depends: gdb,
+         python3-coverage,
          ${misc:Depends},
-         ${python3:Depends}
+         ${python3:Depends},
+         ${shlibs:Depends}
+Multi-Arch: no
 Description: Implementation of the Debug Adapter Protocol for Python 3
  This package allows debugging of Python using Spyder and VS Code, among
  others.  It can also be used directly.

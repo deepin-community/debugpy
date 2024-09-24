@@ -1,0 +1,15 @@
+Description: Ensure the Cython sources are recompiled
+Author: Julian Gilbey <jdg@debian.org>
+Forwarded: not-needed
+Last-Update: 2024-06-30
+
+--- a/setup.py
++++ b/setup.py
+@@ -84,6 +84,7 @@
+                     os.path.join(PYDEVD_ROOT, "setup_pydevd_cython.py"),
+                     "build_ext",
+                     "--inplace",
++                    "--force-cython",
+                 ]
+             )
+         except subprocess.SubprocessError:

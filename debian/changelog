@@ -1,3 +1,50 @@
+debugpy (1.8.5+ds-1) unstable; urgency=medium
+
+  * New upstream version
+  * Fix preinst script
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 27 Aug 2024 20:20:57 +0100
+
+debugpy (1.8.2+ds-5) unstable; urgency=medium
+
+  * More tests failed on the buildd network with version -4; skip these
+    too
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 12 Jul 2024 06:57:27 +0100
+
+debugpy (1.8.2+ds-4) unstable; urgency=medium
+
+  * Skip a few more failing tests
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 08 Jul 2024 07:19:18 +0100
+
+debugpy (1.8.2+ds-3) unstable; urgency=medium
+
+  * Skip failing tests on some architectures and add a README.Debian
+    explaining the situation
+  * Use the Spyder-derived code, borrowed from pydevd, to improve retest
+    time
+  * Delete old pydevd symlinks before installing a new version of debugpy
+    (closes: #1075790)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 07 Jul 2024 19:26:01 +0100
+
+debugpy (1.8.2+ds-2) unstable; urgency=medium
+
+  * Fix pytest-timeout patch
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 05 Jul 2024 08:14:34 +0100
+
+debugpy (1.8.2+ds-1) unstable; urgency=medium
+
+  * New upstream version (closes: #1075603)
+  * Upstream no longer tracks the current pydevd, and there is no prospect
+    of this changing in the near to medium future, so start using vendored
+    pydevd instead.
+    See https://github.com/microsoft/debugpy/discussions/1611
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 04 Jul 2024 18:23:42 +0100
+
 debugpy (1.8.0+ds-4) unstable; urgency=medium
 
   * Silence unvendored warning when using system pydevd
