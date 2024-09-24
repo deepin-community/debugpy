@@ -169,6 +169,7 @@ if __name__ == "__main__":
             "Programming Language :: Python :: 3.9",
             "Programming Language :: Python :: 3.10",
             "Programming Language :: Python :: 3.11",
+            "Programming Language :: Python :: 3.12",
             "Topic :: Software Development :: Debuggers",
             "Operating System :: Microsoft :: Windows",
             "Operating System :: MacOS",
@@ -176,7 +177,14 @@ if __name__ == "__main__":
             "License :: OSI Approved :: MIT License",
         ],
         package_dir={"": "src"},
-        packages=setuptools.find_namespace_packages(where="src", include=["debugpy*"]),
+        packages=[
+            "debugpy",
+            "debugpy.adapter",
+            "debugpy.common",
+            "debugpy.launcher",
+            "debugpy.server",
+            "debugpy._vendored",
+        ],
         package_data={
             "debugpy": ["ThirdPartyNotices.txt"],
             "debugpy._vendored": [
@@ -187,5 +195,7 @@ if __name__ == "__main__":
         ext_modules=ExtModules(),
         has_ext_modules=lambda: True,
         cmdclass=cmds,
+        # allow the user to call "debugpy" instead of "python -m debugpy"
+        entry_points={"console_scripts": ["debugpy = debugpy.server.cli:main"]},
         **extras
     )

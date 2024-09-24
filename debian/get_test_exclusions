@@ -1,16 +1,10 @@
 #! /bin/bash
 
 # This script is called from both debian/rules and from the
-# autopkgtest suite.  Because many of the test exclusions include
-# parentheses, and they are called in different ways, we take an
-# argument specifying rules or autopkgtest
+# autopkgtest suite.
 
-origin=$1
-if [ "$origin" != rules ] && [ "$origin" != autopkgtest ]
-then
-    echo "Argument must be 'rules' or 'autopkgtest'" >&2
-    exit 1
-fi
+interpreter=$1
+arch=$(dpkg --print-architecture)
 
 # These tests fail inconsistently, for some unknown reason
 EXCLUDES=(
@@ -18,18 +12,126 @@ EXCLUDES=(
     "tests/debugpy/test_attach.py::test_attach_pid_client[program-str]"
 )
 
+# Some tests fail on non-amd64/i386 archs
+case $arch in
+    s390x|ppc64)
+	if [ $interpreter = python3.11 ]
+	then
+	    EXCLUDES+=(
+		"tests/debugpy/test_attach.py::test_attach_api"
+		"tests/debugpy/test_attach.py::test_reattach"
+		"tests/debugpy/test_breakpoints.py::test_break_api[launch-breakpoint-module]"
+		"tests/debugpy/test_breakpoints.py::test_break_api[launch-breakpoint-program]"
+		"tests/debugpy/test_evaluate.py::test_set_variable[program-launch]"
+		"tests/debugpy/test_evaluate.py::test_unicode[program-launch]"
+		"tests/debugpy/test_system_info.py::test_debugpySystemInfo[program-launch]"
+		"tests/debugpy/test_threads.py::test_debug_this_thread[program-launch]"
+		"tests/debugpy/test_tracing.py::test_tracing[program-launch]"
+	    )
+	fi
+	;;
+
+    loong64)
+	EXCLUDES+=(
+	    "tests/debugpy/test_args.py::test_args"
+	    "tests/debugpy/test_exception.py::test_success_exitcodes"
+	    "tests/debugpy/test_exception.py::test_systemexit"
+	    "tests/debugpy/test_input.py::test_input[program--attach_pid]"
+	    "tests/debugpy/test_input.py::test_input[program-redirect_output-attach_pid]"
+	    "tests/debugpy/test_input.py::test_stdin_not_patched[program--attach_pid]"
+	    "tests/debugpy/test_input.py::test_stdin_not_patched[program-redirect_output-attach_pid]"
+	    "tests/debugpy/test_log.py::test_log_dir_env[code-attach_pid]"
+	    "tests/debugpy/test_log.py::test_log_dir_env[module-attach_pid]"
+	    "tests/debugpy/test_log.py::test_log_dir_env[program-attach_pid]"
+	    "tests/debugpy/test_output.py::test_redirect_output"
+	    "tests/debugpy/test_output.py::test_with_no_output[program-attach_pid]"
+	    "tests/debugpy/test_run.py::test_frame_eval"
+	    "tests/debugpy/test_run.py::test_run"
+	)
+	;;
+
+    sparc64)
+	EXCLUDES+=(
+	    "tests/debugpy/test_args.py::test_args"
+	    "tests/debugpy/test_exception.py::test_success_exitcodes"
+	    "tests/debugpy/test_exception.py::test_systemexit"
+	    "tests/debugpy/test_input.py::test_input"
+	    "tests/debugpy/test_input.py::test_stdin_not_patched"
+	    "tests/debugpy/test_log.py::test_log_dir_env"
+	    "tests/debugpy/test_output.py::test_redirect_output"
+	    "tests/debugpy/test_output.py::test_with_no_output[program-attach_pid]"
+	    "tests/debugpy/test_run.py::test_frame_eval"
+	    "tests/debugpy/test_run.py::test_run"
+	)
+	if [ $interpreter = python3.11 ]
+	then
+	    EXCLUDES+=(
+		"tests/debugpy/test_attach.py::test_attach_api"
+		"tests/debugpy/test_attach.py::test_reattach"
+		"tests/debugpy/test_breakpoints.py::test_break_api"
+		"tests/debugpy/test_evaluate.py::test_set_variable[program-launch]"
+		"tests/debugpy/test_evaluate.py::test_unicode[program-launch]"
+		"tests/debugpy/test_system_info.py::test_debugpySystemInfo[program-launch]"
+		"tests/debugpy/test_threads.py::test_debug_this_thread[program-launch]"
+		"tests/debugpy/test_tracing.py::test_tracing[program-launch]"
+	    )
+	fi
+	;;
+
+    riscv64)
+	EXCLUDES+=(
+	    "tests/debugpy/common/test_messaging.py::TestJsonMessageChannel::test_fuzz"
+	    "tests/debugpy/test_args.py::test_args"
+	    "tests/debugpy/test_args.py::test_shell_expansion[expand-launch(console=externalTerminal)-module]"
+	    "tests/debugpy/test_attach.py/test_attach_api[--pause]/Session[1]"
+	    "tests/debugpy/test_attach.py::test_attach_pid_client[program-int]"
+	    "tests/debugpy/test_attach.py::test_reattach"
+	    "tests/debugpy/test_breakpoints.py::test_break_api[attach_connect(cli)-breakpoint-program]"
+	    "tests/debugpy/test_breakpoints.py::test_conditional_breakpoint"
+	    "tests/debugpy/test_completions.py::test_completions_scope[program-launch-done]"
+	    "tests/debugpy/test_env.py::test_env_replace_var[program-launch(console=integratedTerminal)-match_case-None]"
+	    "tests/debugpy/test_evaluate.py::test_return_values[program-launch-show]"
+	    "tests/debugpy/test_evaluate.py::test_set_variable[program-launch]"
+	    "tests/debugpy/test_evaluate.py::test_variable_sort[program-launch]"
+	    "tests/debugpy/test_exception.py/test_systemexit[0-zero-uncaught--attach_listen(api)-module]"
+	    "tests/debugpy/test_exception.py::test_raise_exception_options"
+	    "tests/debugpy/test_exception.py::test_success_exitcodes"
+	    "tests/debugpy/test_exception.py::test_systemexit"
+	    "tests/debugpy/test_exclude_rules.py::test_exceptions_and_partial_exclude_rules[module-launch-exclude_callback_dir]"
+	    "tests/debugpy/test_input.py::test_stdin_not_patched[program--launch(console=externalTerminal)]"
+	    "tests/debugpy/test_log.py::test_log_dir_env[module-attach_pid] - debug..."
+	    "tests/debugpy/test_multiproc.py::test_argv_quoting[program-launch]"
+	    "tests/debugpy/test_output.py::test_redirect_output[program-enabled-attach_pid]"
+	    "tests/debugpy/test_output.py::test_with_no_output[program-attach_pid]"
+	    "tests/debugpy/test_run.py/test_frame_eval[yes-code-attach_listen(cli)]"
+	    "tests/debugpy/test_run.py::test_custom_python_args"
+	    "tests/debugpy/test_run.py::test_frame_eval"
+	    "tests/debugpy/test_run.py::test_run"
+	    "tests/debugpy/test_stop_on_entry.py::test_stop_on_entry[program-launch(console=externalTerminal)-]"
+	    "tests/tests/test_timeline.py::test_occurrences"
+	)
+	;;
+
+    alpha)
+	EXCLUDES+=(
+	    "tests/debugpy/common/test_messaging.py::TestJsonMessageChannel::test_fuzz"
+	    "tests/debugpy/test_env.py::test_env_replace_var[program-launch(console=integratedTerminal)-match_case-None]"
+	    "tests/debugpy/test_exception.py::test_success_exitcodes"
+	    "tests/debugpy/test_exception.py::test_systemexit"
+	    "tests/debugpy/test_exclude_rules.py::test_exceptions_and_partial_exclude_rules[program-launch-exclude_code_to_debug]"
+	    "tests/debugpy/test_multiproc.py::test_subprocess[program-attach_connect(api)--None]"
+	    "tests/debugpy/test_multiproc.py::test_subprocess[program-attach_connect(cli)-startDebugging-True]"
+	    "tests/debugpy/test_run.py::test_custom_python_args[program-pythonPath-custompy,-O-None-launch(console=integratedTerminal)]"
+	    "tests/debugpy/test_run.py::test_custom_python_args[program-pythonPath-custompy,-O-None-launch(console=internalConsole)]"
+	)
+	;;
+    *)
+	;;
+esac
+
 DESELECTS=()
-if [ $origin = rules ]
-then
-    for test in "${EXCLUDES[@]}"
-    do
-        DESELECTS+=("--deselect='$test'")
-    done
-    echo ${DESELECTS[*]}
-else
-    for test in "${EXCLUDES[@]}"
-    do
-        DESELECTS+=("--deselect=$test")
-    done
-    echo "${DESELECTS[*]}"
-fi
+for test in "${EXCLUDES[@]}"
+do
+    DESELECTS+=("--deselect=$test")
+done
+echo ${DESELECTS[*]}

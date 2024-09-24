@@ -1,0 +1,9 @@
+Debugpy for Debian
+==================
+
+Upstream only supports amd64 and i386 architectures.  There are a
+significant number of test failures on some other architectures (most
+notably alpha, loong64, ppc64, sparc64 and riscv64), so this package
+may well not perform as expected on these architectures.
+
+ -- Julian Gilbey <jdg@debian.org>, Tue,  9 Jul 2024 19:19:46 +0100

@@ -1,0 +1,36 @@
+Description: Handle newer pytest_timeout version
+  Replace removed write_title() and handle updated dump_stacks() functions.
+  These changes were made in pytest_timeout 2.3.0.  This solution is
+  a bit of a hack and may not be viable long-term; see
+  https://github.com/pytest-dev/pytest/issues/10436
+Author: Julian Gilbey <jdg@debian.org>
+Forwarded: https://github.com/microsoft/debugpy/issues/1620
+Last-Update: 2024-07-05
+
+--- a/tests/logs.py
++++ b/tests/logs.py
+@@ -4,7 +4,7 @@
+ 
+ import io
+ import os
+-import pytest_timeout
++from _pytest._io import TerminalWriter
+ import sys
+ 
+ from debugpy.common import json, log
+@@ -27,5 +27,6 @@
+                 pass
+             else:
+                 path = os.path.relpath(path, log.log_dir)
+-                pytest_timeout.write_title(path)
++                out = TerminalWriter()
++                out.sep("+", title=path)
+                 print(s, file=sys.stderr)
+--- a/tests/pytest_hooks.py
++++ b/tests/pytest_hooks.py
+@@ -61,4 +61,4 @@
+ # we want to print the pydevd log as well. This is not a normal pytest hook - we
+ # just detour pytest_timeout.dump_stacks directly.
+ _dump_stacks = pytest_timeout.dump_stacks
+-pytest_timeout.dump_stacks = lambda: (_dump_stacks(), logs.dump())
++pytest_timeout.dump_stacks = lambda term: (_dump_stacks(term), logs.dump())

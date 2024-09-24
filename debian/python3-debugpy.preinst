@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+# We clean up from old versions that didn't properly remove all
+# symlinks to pydevd during the upgrade.  The first version to
+# include this preinst is 1.8.2+ds-3, but this code was slightly
+# inaccurate in the 1.8.2+ds series, so we regard anything so we
+# regard anything earlier than 1.8.5+ds-1 as suspect.
+
+if [ "$1" = upgrade -o \( "$1" = install -a -n "$2" \) ]
+then
+   old_version=$2
+   if dpkg --compare-versions $old_version lt 1.8.5+ds-1
+   then
+       rm -rf /usr/lib/python3/dist-packages/debugpy/_vendored/pydevd
+       rm -rf /usr/lib/python3/dist-packages/debugpy/_vendored/__pycache__
+   fi
+elif [ "$1" = install -a -d /usr/lib/python3/dist-packages/debugpy ]
+then
+    # There is cruft left over from a previous, now-purged, installation
+    rm -rf /usr/lib/python3/dist-packages/debugpy
+fi
+
+#DEBHELPER#
